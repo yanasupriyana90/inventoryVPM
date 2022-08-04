@@ -187,11 +187,13 @@
 							</a>
 							<div class="collapse" id="laporan">
 								<ul class="nav nav-collapse">
+                                    @if(Auth::user()->level == 1)
 									<li class="{{ Request::is('lap_kategori') ? 'active' : '' }}">
 										<a href="/lap_kategori">
 											<span><i class="fas fa-file-alt"></i> Laporan Data Kategori</span>
 										</a>
 									</li>
+                                    @endif
 									<li class="{{ Request::is('lap_barang') ? 'active' : '' }}">
 										<a href="/lap_barang">
 											<span><i class="fas fa-box"></i> Laporan Data Barang</span>

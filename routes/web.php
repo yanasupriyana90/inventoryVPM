@@ -49,9 +49,6 @@ Route::group(['middleware' => ['auth', 'level:1']], function () {
     Route::post('/barang/{id}/update', [BarangController::class, 'update']);
     Route::get('/barang/{id}/destroy', [BarangController::class, 'destroy']);
 
-    // Laporan Barang
-    Route::get('/lap_barang', [LaporanController::class, 'lap_barang']);
-    Route::get('/lap_barang/cetak_barang', [LaporanController::class, 'cetak_barang']);
 
     // Laporan Kategori
     Route::get('/lap_kategori', [LaporanController::class, 'lap_kategori']);
@@ -81,4 +78,9 @@ Route::group(['middleware' => ['auth', 'level:1,2,3']], function () {
     // Laporan Barang Keluar
     Route::get('/lap_brg_keluar', [LaporanController::class, 'lap_brg_keluar']);
     Route::get('/lap_brg_keluar/cetak_brg_keluar', [LaporanController::class, 'cetak_brg_keluar']);
+
+
+    // Laporan Barang
+    Route::get('/lap_barang', [LaporanController::class, 'lap_barang']);
+    Route::get('/lap_barang/cetak_barang', [LaporanController::class, 'cetak_barang']);
 });

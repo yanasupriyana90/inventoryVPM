@@ -46,7 +46,9 @@
                                             <th>No</th>
                                             <th>Nama Barang</th>
                                             <th>Kategori</th>
+                                            @if(Auth::user()->level == 1 || Auth::user()->level == 2)
                                             <th>Harga</th>
+                                            @endif
                                             <th>Stok</th>
                                         </tr>
                                     </thead>
@@ -60,7 +62,9 @@
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $row->nama_brg }}</td>
                                             <td>{{ $row->nama_kategori }}</td>
+                                            @if(Auth::user()->level == 1 || Auth::user()->level == 2)
                                             <td>Rp. {{ number_format($row->harga) }}</td>
+                                            @endif
                                             <td>{{ $row->stok }} Unit</td>
 
                                         </tr>
