@@ -132,7 +132,7 @@
 						</li>
 						@if(Auth::user()->level == 1)
 						<li class="nav-item {{ Request::is('kategori', 'barang') ? 'active' : '' }}">
-							<a data-toggle=" collapse" href="#base">
+							<a data-toggle="collapse" href="#base">
 								<i class="fas fa-layer-group"></i>
 								<p>Data Master</p>
 								<span class="caret"></span>
