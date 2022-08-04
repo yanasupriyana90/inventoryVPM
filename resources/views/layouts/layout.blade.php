@@ -134,7 +134,7 @@
 						<li class="nav-item {{ Request::is('kategori', 'barang') ? 'active' : '' }}">
 							<a data-toggle="collapse" href="#base">
 								<i class="fas fa-layer-group"></i>
-								<p>Data Master</p>
+								<p>Data Master Cobaan</p>
 								<span class="caret"></span>
 							</a>
 							<div class="collapse" id="base">
