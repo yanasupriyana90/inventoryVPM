@@ -36,49 +36,49 @@ Route::post('/register', [RegisterController::class, 'store'])->middleware('gues
 Route::get('/home', [HomeController::class, 'home'])->middleware('auth');
 
 
-// Data Kategori
-Route::get('/kategori', [KategoriController::class, 'index'])->middleware('auth');
-Route::post('/kategori/store', [KategoriController::class, 'store'])->middleware('auth');
-Route::post('/kategori/{id}/update', [KategoriController::class, 'update'])->middleware('auth');
-Route::get('/kategori/{id}/destroy', [KategoriController::class, 'destroy'])->middleware('auth');
+Route::group(['middleware' => ['auth', 'level:1']], function () {
+    // Data Kategori
+    Route::get('/kategori', [KategoriController::class, 'index']);
+    Route::post('/kategori/store', [KategoriController::class, 'store']);
+    Route::post('/kategori/{id}/update', [KategoriController::class, 'update']);
+    Route::get('/kategori/{id}/destroy', [KategoriController::class, 'destroy']);
+
+    // Data Barang
+    Route::get('/barang', [BarangController::class, 'index']);
+    Route::post('/barang/store', [BarangController::class, 'store']);
+    Route::post('/barang/{id}/update', [BarangController::class, 'update']);
+    Route::get('/barang/{id}/destroy', [BarangController::class, 'destroy']);
+
+    // Laporan Barang
+    Route::get('/lap_barang', [LaporanController::class, 'lap_barang']);
+    Route::get('/lap_barang/cetak_barang', [LaporanController::class, 'cetak_barang']);
+
+    // Laporan Kategori
+    Route::get('/lap_kategori', [LaporanController::class, 'lap_kategori']);
+    Route::get('/lap_kategori/cetak_kategori', [LaporanController::class, 'cetak_kategori']);
+});
+
+Route::group(['middleware' => ['auth', 'level:1,2']], function () {
+    // Data Barang Masuk
+    Route::get('/brg_masuk', [BrgMasukController::class, 'index']);
+    Route::get('/brg_masuk/ajax', [BrgMasukController::class, 'ajax']);
+    Route::get('/brg_masuk/create', [BrgMasukController::class, 'create']);
+    Route::post('/brg_masuk/store', [BrgMasukController::class, 'store']);
 
 
-// Data Barang
-Route::get('/barang', [BarangController::class, 'index'])->middleware('auth');
-Route::post('/barang/store', [BarangController::class, 'store'])->middleware('auth');
-Route::post('/barang/{id}/update', [BarangController::class, 'update'])->middleware('auth');
-Route::get('/barang/{id}/destroy', [BarangController::class, 'destroy'])->middleware('auth');
+    // Data Barang Keluar
+    Route::get('/brg_keluar', [BrgKeluarController::class, 'index']);
+    Route::get('/brg_keluar/ajax', [BrgKeluarController::class, 'ajax']);
+    Route::get('/brg_keluar/create', [BrgKeluarController::class, 'create']);
+    Route::post('/brg_keluar/store', [BrgKeluarController::class, 'store']);
+});
+Route::group(['middleware' => ['auth', 'level:1,2,3']], function () {
+    // Laporan Barang Masuk
+    Route::get('/lap_brg_masuk', [LaporanController::class, 'lap_brg_masuk']);
+    Route::get('/lap_brg_masuk/cetak_brg_masuk', [LaporanController::class, 'cetak_brg_masuk']);
 
 
-// Data Barang Masuk
-Route::get('/brg_masuk', [BrgMasukController::class, 'index'])->middleware('auth');
-Route::get('/brg_masuk/ajax', [BrgMasukController::class, 'ajax'])->middleware('auth');
-Route::get('/brg_masuk/create', [BrgMasukController::class, 'create'])->middleware('auth');
-Route::post('/brg_masuk/store', [BrgMasukController::class, 'store'])->middleware('auth');
-
-
-// Data Barang Keluar
-Route::get('/brg_keluar', [BrgKeluarController::class, 'index'])->middleware('auth');
-Route::get('/brg_keluar/ajax', [BrgKeluarController::class, 'ajax'])->middleware('auth');
-Route::get('/brg_keluar/create', [BrgKeluarController::class, 'create'])->middleware('auth');
-Route::post('/brg_keluar/store', [BrgKeluarController::class, 'store'])->middleware('auth');
-
-
-// Laporan Barang Masuk
-Route::get('/lap_brg_masuk', [LaporanController::class, 'lap_brg_masuk'])->middleware('auth');
-Route::get('/lap_brg_masuk/cetak_brg_masuk', [LaporanController::class, 'cetak_brg_masuk'])->middleware('auth');
-
-
-// Laporan Barang Keluar
-Route::get('/lap_brg_keluar', [LaporanController::class, 'lap_brg_keluar'])->middleware('auth');
-Route::get('/lap_brg_keluar/cetak_brg_keluar', [LaporanController::class, 'cetak_brg_keluar'])->middleware('auth');
-
-
-// Laporan Barang
-Route::get('/lap_barang', [LaporanController::class, 'lap_barang'])->middleware('auth');
-Route::get('/lap_barang/cetak_barang', [LaporanController::class, 'cetak_barang'])->middleware('auth');
-
-
-// Laporan Kategori
-Route::get('/lap_kategori', [LaporanController::class, 'lap_kategori'])->middleware('auth');
-Route::get('/lap_kategori/cetak_kategori', [LaporanController::class, 'cetak_kategori'])->middleware('auth');
+    // Laporan Barang Keluar
+    Route::get('/lap_brg_keluar', [LaporanController::class, 'lap_brg_keluar']);
+    Route::get('/lap_brg_keluar/cetak_brg_keluar', [LaporanController::class, 'cetak_brg_keluar']);
+});
