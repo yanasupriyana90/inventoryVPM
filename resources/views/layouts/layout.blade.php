@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>Sistem Inventory PT. VPM</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-	<link rel="icon" href="/assets/img/Vpm Logo.ico" type="image/x-icon"/>
+	<link rel="icon" href="/assets/img/Vpm Logo.ico" type="image/x-icon" />
 	<!-- Fonts and icons -->
 	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
 	<script>
 		WebFont.load({
-			google: {"families":["Open+Sans:300,400,600,700"]},
-			custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands"], urls: ['/assets/css/fonts.css']},
+			google: {
+				"families": ["Open+Sans:300,400,600,700"]
+			},
+			custom: {
+				"families": ["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands"],
+				urls: ['/assets/css/fonts.css']
+			},
 			active: function() {
 				sessionStorage.fonts = true;
 			}
@@ -24,6 +30,7 @@
 	<!-- CSS Just for demo purpose, don't include it in your project -->
 	<link rel="stylesheet" href="/assets/css/demo.css">
 </head>
+
 <body>
 	<div class="wrapper">
 		<!--
@@ -53,7 +60,7 @@
 			<nav class="navbar navbar-header navbar-expand-lg">
 
 				<div class="container-fluid">
-                    <H1 style="color: black">Welcome Back, {{ auth()->user()->name }}</H1>
+					<H1 style="color: black">Welcome Back, {{ auth()->user()->name }}</H1>
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
 						<li class="nav-item toggle-nav-search hidden-caret">
 							<a class="nav-link" data-toggle="collapse" href="#search-nav" role="button" aria-expanded="false" aria-controls="search-nav">
@@ -79,12 +86,12 @@
 								<li>
 									{{-- <div class="dropdown-divider"></div>
 									<a class="dropdown-item" href="#"><i class="fa fa-user"></i> My Profile</a> --}}
-                                    <div class="dropdown-divider"></div>
-                                    <form action="/logout" method="POST">
-                                        @csrf
-                                        <button type="submit" class=" dropdown-item bg-light border-0"><i class="fa fa-power-off"></i> Logout</a>
-                                        </button>
-                                    </form>
+									<div class="dropdown-divider"></div>
+									<form action="/logout" method="POST">
+										@csrf
+										<button type="submit" class=" dropdown-item bg-light border-0"><i class="fa fa-power-off"></i> Logout</a>
+										</button>
+									</form>
 								</li>
 							</ul>
 						</li>
@@ -123,8 +130,9 @@
 							</span>
 							<h4 class="text-section">Menu</h4>
 						</li>
-						<li class="nav-item {{ Request::is('kategori', 'barang') ? 'active' : '' }}"">
-							<a data-toggle="collapse" href="#base">
+						@if(Auth::user()->level == 1)
+						<li class="nav-item {{ Request::is('kategori', 'barang') ? 'active' : '' }}">
+							<a data-toggle=" collapse" href="#base">
 								<i class="fas fa-layer-group"></i>
 								<p>Data Master</p>
 								<span class="caret"></span>
@@ -136,7 +144,7 @@
 											<span><i class="fas fa-file-alt"></i> Data Kategori</span>
 										</a>
 									</li>
-                                    <li class="{{ Request::is('barang') ? 'active' : '' }}">
+									<li class="{{ Request::is('barang') ? 'active' : '' }}">
 										<a href="/barang">
 											<span><i class="fas fa-box"></i> Data Barang</span>
 										</a>
@@ -144,8 +152,10 @@
 								</ul>
 							</div>
 						</li>
+						@endif
 
-                        <li class="nav-item {{ Request::is('brg_masuk', 'brg_keluar') ? 'active' : '' }}">
+						@if(Auth::user()->level == 1 || Auth::user()->level == 2)
+						<li class="nav-item {{ Request::is('brg_masuk', 'brg_keluar') ? 'active' : '' }}">
 							<a data-toggle="collapse" href="#transaksi">
 								<i class="fas fa-dollar-sign"></i>
 								<p>Transaksi</p>
@@ -158,7 +168,7 @@
 											<span><i class="fas fa-sign-in-alt"></i> Barang Masuk</span>
 										</a>
 									</li>
-                                    <li class="{{ Request::is('brg_keluar') ? 'active' : '' }}">
+									<li class="{{ Request::is('brg_keluar') ? 'active' : '' }}">
 										<a href="/brg_keluar">
 											<span><i class="fas fa-sign-out-alt"></i> Barang Keluar</span>
 										</a>
@@ -166,8 +176,10 @@
 								</ul>
 							</div>
 						</li>
+						@endif
 
-                        <li class="nav-item {{ Request::is('lap_kategori', 'lap_barang', 'lap_brg_masuk', 'lap_brg_keluar') ? 'active' : '' }}">
+						@if(Auth::user()->level == 1 || Auth::user()->level == 2 || Auth::user()->level == 3)
+						<li class="nav-item {{ Request::is('lap_kategori', 'lap_barang', 'lap_brg_masuk', 'lap_brg_keluar') ? 'active' : '' }}">
 							<a data-toggle="collapse" href="#laporan">
 								<i class="fas fa-chart-line"></i>
 								<p>Data Laporan</p>
@@ -180,17 +192,17 @@
 											<span><i class="fas fa-file-alt"></i> Laporan Data Kategori</span>
 										</a>
 									</li>
-                                    <li class="{{ Request::is('lap_barang') ? 'active' : '' }}">
+									<li class="{{ Request::is('lap_barang') ? 'active' : '' }}">
 										<a href="/lap_barang">
 											<span><i class="fas fa-box"></i> Laporan Data Barang</span>
 										</a>
 									</li>
-                                    <li class="{{ Request::is('lap_brg_masuk') ? 'active' : '' }}">
+									<li class="{{ Request::is('lap_brg_masuk') ? 'active' : '' }}">
 										<a href="/lap_brg_masuk">
 											<span><i class="fas fa-sign-in-alt"></i> Laporan Barang Masuk</span>
 										</a>
 									</li>
-                                    <li class="{{ Request::is('lap_brg_keluar') ? 'active' : '' }}">
+									<li class="{{ Request::is('lap_brg_keluar') ? 'active' : '' }}">
 										<a href="/lap_brg_keluar">
 											<span><i class="fas fa-sign-out-alt"></i> Laporan Barang Keluar</span>
 										</a>
@@ -198,13 +210,13 @@
 								</ul>
 							</div>
 						</li>
-
+						@endif
 					</ul>
 				</div>
 			</div>
 		</div>
 
-        @yield('content')
+		@yield('content')
 
 	</div>
 	<!--   Core JS Files   -->
@@ -225,34 +237,34 @@
 	<!-- Azzara DEMO methods, don't include it in your project! -->
 	<script src="/assets/js/setting-demo.js"></script>
 
-    <!-- Sweet Alert -->
-    <script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+	<!-- Sweet Alert -->
+	<script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
 
-    @if (session('success'))
-    <script>
-        //== Class definition
+	@if (session('success'))
+	<script>
+		//== Class definition
 		var SweetAlert2Demo = function() {
 
-            //== Demos
+			//== Demos
 			var initDemos = function() {
 
-                swal({
-                    title: "{{ session('success') }}",
-                    text: "{{ session('success') }}",
-                    icon: "success",
-                    button: {
-                        confirm: {
-                            text: "Confirm Me",
-                            value: true,
-                            visible: true,
-                            className: "btn btn-success",
-                            closeModal: true
-                        }
-                    }
-            });
-        };
+				swal({
+					title: "{{ session('success') }}",
+					text: "{{ session('success') }}",
+					icon: "success",
+					button: {
+						confirm: {
+							text: "Confirm Me",
+							value: true,
+							visible: true,
+							className: "btn btn-success",
+							closeModal: true
+						}
+					}
+				});
+			};
 
-            return {
+			return {
 				//== Init
 				init: function() {
 					initDemos();
@@ -260,38 +272,38 @@
 			};
 		}();
 
-        //== Class Initialization
-        jQuery(document).ready(function() {
+		//== Class Initialization
+		jQuery(document).ready(function() {
 			SweetAlert2Demo.init();
 		});
-        </script>
-    @endif
+	</script>
+	@endif
 
-    @if (session('error'))
-    <script>
-        //== Class definition
+	@if (session('error'))
+	<script>
+		//== Class definition
 		var SweetAlert2Demo = function() {
 
-            //== Demos
+			//== Demos
 			var initDemos = function() {
 
-                swal({
-                    title: "{{ session('error') }}",
-                    text: "{{ session('error') }}",
-                    icon: "error",
-                    button: {
-                        confirm: {
-                            text: "Confirm Me",
-                            value: true,
-                            visible: true,
-                            className: "btn btn-success",
-                            closeModal: true
-                        }
-                    }
-            });
-        };
+				swal({
+					title: "{{ session('error') }}",
+					text: "{{ session('error') }}",
+					icon: "error",
+					button: {
+						confirm: {
+							text: "Confirm Me",
+							value: true,
+							visible: true,
+							className: "btn btn-success",
+							closeModal: true
+						}
+					}
+				});
+			};
 
-            return {
+			return {
 				//== Init
 				init: function() {
 					initDemos();
@@ -299,20 +311,21 @@
 			};
 		}();
 
-        //== Class Initialization
-        jQuery(document).ready(function() {
+		//== Class Initialization
+		jQuery(document).ready(function() {
 			SweetAlert2Demo.init();
 		});
-        </script>
-    @endif
+	</script>
+	@endif
 
-	<script >
+	<script>
 		$(document).ready(function() {
-			$('#add-row').DataTable( {
+			$('#add-row').DataTable({
 
-            });
+			});
 		});
 	</script>
 
 </body>
+
 </html>
