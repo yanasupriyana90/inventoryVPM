@@ -6,6 +6,8 @@ use App\Models\Barang;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 date_default_timezone_set('Asia/Jakarta');
 
 class BarangController extends Controller
@@ -18,11 +20,15 @@ class BarangController extends Controller
     public function index()
     {
         $barang = Barang::join('kategori', 'kategori.id', '=', 'barang.id_kategori')
-                  ->select('barang.*', 'kategori.nama_kategori')
-                  ->get();
+            ->select('barang.*', 'kategori.nama_kategori')
+            ->get();
 
         $kategori = Kategori::all();
 
+        foreach ($barang as $key) {
+            $key->qrCode = QrCode::generate($key->id . ' ' . $key->id_kategori);
+        }
+        // dd($barang);
         return view('admin.master.barang.barang', compact('barang', 'kategori'));
     }
 
@@ -54,7 +60,6 @@ class BarangController extends Controller
         ]);
 
         return redirect('/barang')->with('success', 'Data Berhasil Disimpan');
-
     }
 
     /**

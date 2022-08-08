@@ -40,7 +40,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="add-row" class="display table table-striped table-hover" >
+                                <table id="add-row" class="display table table-striped table-hover">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -63,7 +63,8 @@
                                             <td>{{ $row->nama_kategori }}</td>
                                             <td>Rp. {{ number_format($row->harga) }}</td>
                                             <td>{{ $row->stok }} Unit</td>
-                                            <td>
+                                            <td class="text-center">
+                                                <button class="btn btn-info btn-xs" data-item="{{$row}}" data-qrCode="{{ htmlspecialchars($row->qrCode) }}" onclick="generateQrCode(this)"><i class="fa fa-qrcode"></i> Cetak QrCode</button>
                                                 <a href="#modalEditBarang{{ $row->id }}" data-toggle="modal" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
                                                 <a href="#modalHapusBarang{{ $row->id }}" data-toggle="modal" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Hapus</a>
                                             </td>
@@ -238,5 +239,71 @@
     </div>
 </div>
 @endforeach
+<div class="modal fade" id="modalQrCode" tabindex="-1" role="dialog" aria-labelledby="modalQrCodeLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalQrCodeTitle">QR-CODE</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <div id="viewQrCode" class="mb-2">
 
+                </div>
+                <button type="button" class="btn btn-secondary" id="downloadPNG"><i class="fa fa-download"></i> Download to PNG</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function generateQrCode(obj) {
+        const item = $(obj).data('item');
+        const qrCode = $(obj).data('qrcode');
+
+        document.querySelector('#downloadPNG').dataset.namabarang = item.nama_brg;
+
+        document.getElementById('viewQrCode').innerHTML = htmlDecode(qrCode);
+        $('#modalQrCode').modal('show')
+    }
+
+    function htmlDecode(input) {
+        const doc = new DOMParser().parseFromString(input, 'text/html');
+        return doc.documentElement.textContent;
+    };
+
+    document.querySelector('#downloadPNG').addEventListener('click', downloadSVGAsPNG);
+
+    function downloadSVGAsPNG(e) {
+        let namabarang = $(e.target).data('namabarang');
+
+        const canvas = document.createElement("canvas");
+        const svg = document.querySelector('#viewQrCode svg');
+        const base64doc = btoa(unescape(encodeURIComponent(svg.outerHTML)));
+        const w = parseInt(svg.getAttribute('width'));
+        const h = parseInt(svg.getAttribute('height'));
+        const img_to_download = document.createElement('img');
+        img_to_download.src = 'data:image/svg+xml;base64,' + base64doc;
+        img_to_download.onload = function() {
+            canvas.setAttribute('width', w);
+            canvas.setAttribute('height', h);
+            const context = canvas.getContext("2d");
+            //context.clearRect(0, 0, w, h);
+            context.drawImage(img_to_download, 0, 0, w, h);
+            const dataURL = canvas.toDataURL('image/png');
+            if (window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(canvas.msToBlob(), `qrCode-${namabarang}.png`);
+                e.preventDefault();
+            } else {
+                const a = document.createElement('a');
+                const my_evt = new MouseEvent('click');
+                a.download = `qrCode-${namabarang}.png`;
+                a.href = dataURL;
+                a.dispatchEvent(my_evt);
+            }
+            //canvas.parentNode.removeChild(canvas);
+        }
+    }
+</script>
 @endsection

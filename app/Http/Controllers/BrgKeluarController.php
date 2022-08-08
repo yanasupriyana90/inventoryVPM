@@ -19,9 +19,9 @@ class BrgKeluarController extends Controller
     public function index()
     {
         $brg_keluar = BrgKeluar::join('barang', 'barang.id', '=', 'brg_keluar.id_brg')
-                    ->join('kategori', 'kategori.id', '=', 'barang.id_kategori')
-                    ->select('brg_keluar.*', 'kategori.nama_kategori', 'barang.harga', 'barang.nama_brg')
-                    ->get();
+            ->join('kategori', 'kategori.id', '=', 'barang.id_kategori')
+            ->select('brg_keluar.*', 'kategori.nama_kategori', 'barang.harga', 'barang.nama_brg')
+            ->get();
 
         $barang = Barang::all();
 
@@ -38,17 +38,13 @@ class BrgKeluarController extends Controller
         $barang = Barang::all();
 
         $q = DB::table('brg_keluar')->select(DB::raw('MAX(RIGHT(no_brg_keluar,4)) as kode'));
-        $kd="";
-        if($q->count()>0)
-        {
-            foreach($q->get() as $k)
-            {
-                $tmp = ((int)$k->kode)+1;
+        $kd = "";
+        if ($q->count() > 0) {
+            foreach ($q->get() as $k) {
+                $tmp = ((int)$k->kode) + 1;
                 $kd = sprintf("%04s", $tmp);
             }
-        }
-        else
-        {
+        } else {
             $kd = "0001";
         }
 
@@ -58,9 +54,9 @@ class BrgKeluarController extends Controller
     public function ajax(Request $request)
     {
         $id_brg['id_brg'] = $request->id_brg;
-        $ajax_barang = Barang::where('id', $id_brg)->get();
+        $ajax_barang = Barang::where('id', $id_brg)->first();
 
-        return view('admin.transaksi.brg_keluar.ajax', compact('ajax_barang'));
+        echo json_encode($ajax_barang);
     }
 
     /**
@@ -74,12 +70,9 @@ class BrgKeluarController extends Controller
 
         $barang = Barang::find($request->id_brg);
 
-        if($barang->stok < $request->jml_brg_keluar)
-        {
+        if ($barang->stok < $request->jml_brg_keluar) {
             return redirect('/brg_keluar/create')->with('error', 'Jumlah Barang Melebihi Stok');
-        }
-        else
-        {
+        } else {
             BrgKeluar::create([
                 'no_brg_keluar'  => $request->no_brg_keluar,
                 'id_brg'         => $request->id_brg,
@@ -96,7 +89,6 @@ class BrgKeluarController extends Controller
 
             return redirect('/brg_keluar')->with('success', 'Data Berhasil Disimpan');
         }
-
     }
 
     /**

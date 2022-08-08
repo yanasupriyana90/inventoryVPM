@@ -51,22 +51,31 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Nama Barang</label>
-                                    <Select class="form-control" name="id_brg" id="id_brg" required>
-                                        <option value="" hidden="">== Pilih Barang ==</option>
-
-                                        @foreach ($barang as $d)
-                                        <option value="{{ $d->id }}">{{ $d->nama_brg }}</option>
-                                        @endforeach
-                                    </Select>
+                                    <label>Barang</label>
+                                    <div class="input-group mb-3" id="input-barang">
+                                        <input type="hidden" name="id_brg" id="id_barang">
+                                        <input type="text" class="form-control" name="nama_barang" id="nama_barang" readonly required>
+                                        <button class="input-group-text btn" type="button" onclick="scan()"><i class="fa fa-qrcode mr-2"></i> Scan Qr Code</button>
+                                    </div>
+                                    <div class="col-lg-4" id="scan-barang" style="display: none;">
+                                        <video id="preview" class="player rounded-3 w-100 rounded"></video>
+                                    </div>
                                 </div>
 
-                                <div id="detail_barang"></div>
+                                <div class="form-group" id="harga_brg" style="display: none;">
+                                    <label>Harga</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">Rp</span>
+                                        </div>
+                                        <input type="text" class="form-control" id="harga" readonly required>
+                                    </div>
+                                </div>
 
                                 <div class="form-group">
                                     <label>Jumlah Barang</label>
                                     <div class="input-group mb-3">
-                                        <input type="number" class="form-control" name="jml_brg_keluar" id= "jml_brg_keluar" placeholder="Jumlah Barang .." required>
+                                        <input type="number" class="form-control" name="jml_brg_keluar" id="jml_brg_keluar" placeholder="Jumlah Barang .." required>
 
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="basic-addon2">Unit</span>
@@ -98,6 +107,7 @@
 </div>
 
 <script src="/assets/js/core/jquery.3.2.1.min.js"></script>
+<script src="{{ asset('assets/js/instanscan/instascan.min.js') }}"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -109,29 +119,84 @@
             $("#total").val(total);
         });
     });
-</script>
 
-<script type="text/javascript">
-    $.ajaxSetup({
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-</script>
+    function scan() {
+        const args = {
+            video: document.getElementById('preview')
+        };
 
-<script type="text/javascript">
-    $('#id_brg').change(function(){
-        var id_brg = $('#id_brg').val();
-        $.ajax({
-            type: "GET",
-            url: "/brg_keluar/ajax",
-            data: "id_brg="+id_brg,
-            cache:false,
-            success: function(data){
-                $('#detail_barang').html(data);
-            }
+        window.URL.createObjectURL = (stream) => {
+            args.video.srcObject = stream;
+            return stream;
+        };
+        let scanner = new Instascan.Scanner(args);
+        scanner.addListener('scan', function(content) {
+            let pisah = content.split('-');
+            $.ajax({
+                type: "GET",
+                url: "{{url('brg_keluar/ajax')}}",
+                data: {
+                    'id_brg': pisah[0]
+                },
+                dataType: "JSON",
+                success: function(data) {
+                    if (data) {
+                        console.log(data);
+                        document.getElementById('nama_barang').value = data.nama_brg;
+                        document.getElementById('id_barang').value = data.id;
+                        document.getElementById('harga').value = data.harga;
+                        // Intl.NumberFormat().format(data.harga)
+                        document.getElementById('harga_brg').style.display = 'block';
+
+                        scanner.stop();
+                        document.querySelector('#input-barang').style.display = 'flex';
+                        document.querySelector('#scan-barang').style.display = 'none';
+
+                        document.getElementById('jml_brg_keluar').focus();
+                    } else {
+                        swal({
+                            title: 'Warning',
+                            text: 'Barang tidak ditemukan',
+                            type: 'warning',
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+                    }
+                }
+            })
         });
-    });
-</script>
 
+        Instascan.Camera.getCameras().then(function(cameras) {
+            if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+                document.querySelector('#input-barang').style.display = 'none';
+                document.querySelector('#scan-barang').style.display = 'block';
+            } else {
+                console.log('No cameras found.');
+            }
+        }).catch(function(e) {
+            console.log(e);
+        });
+
+    }
+
+    // $.ajaxSetup({
+    //     headers: {
+    //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+    //     }
+    // });
+
+    // $('#id_brg').change(function() {
+    //     var id_brg = $('#id_brg').val();
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "/brg_keluar/ajax",
+    //         data: "id_brg=" + id_brg,
+    //         cache: false,
+    //         success: function(data) {
+    //             $('#detail_barang').html(data);
+    //         }
+    //     });
+    // });
+</script>
 @endsection
