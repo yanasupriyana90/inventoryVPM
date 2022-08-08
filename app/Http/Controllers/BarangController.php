@@ -26,7 +26,7 @@ class BarangController extends Controller
         $kategori = Kategori::all();
 
         foreach ($barang as $key) {
-            $key->qrCode = QrCode::generate($key->id . ' ' . $key->id_kategori);
+            $key->qrCode = QrCode::size(200)->generate($key->id . ' ' . $key->id_kategori);
         }
         // dd($barang);
         return view('admin.master.barang.barang', compact('barang', 'kategori'));
