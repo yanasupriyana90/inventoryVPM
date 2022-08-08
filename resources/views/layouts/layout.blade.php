@@ -139,14 +139,19 @@
 							</a>
 							<div class="collapse" id="base">
 								<ul class="nav nav-collapse">
+                                    <li class="{{ Request::is('user') ? 'active' : '' }}">
+                                        <a href="/user">
+                                            <span><i class="fas fa-users"></i> Data User</span>
+                                        </a>
+                                    </li>
+                                    <li class="{{ Request::is('barang') ? 'active' : '' }}">
+                                        <a href="/barang">
+                                            <span><i class="fas fa-box"></i> Data Barang</span>
+                                        </a>
+                                    </li>
 									<li class="{{ Request::is('kategori') ? 'active' : '' }}">
 										<a href="/kategori">
 											<span><i class="fas fa-file-alt"></i> Data Kategori</span>
-										</a>
-									</li>
-									<li class="{{ Request::is('barang') ? 'active' : '' }}">
-										<a href="/barang">
-											<span><i class="fas fa-box"></i> Data Barang</span>
 										</a>
 									</li>
 								</ul>

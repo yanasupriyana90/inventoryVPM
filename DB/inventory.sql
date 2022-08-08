@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 28, 2022 at 02:34 AM
+-- Generation Time: Aug 08, 2022 at 10:44 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -152,6 +152,28 @@ INSERT INTO `kategori` (`id`, `nama_kategori`, `created_at`, `updated_at`) VALUE
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `level`
+--
+
+CREATE TABLE `level` (
+  `id` int(11) NOT NULL,
+  `nama_level` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `level`
+--
+
+INSERT INTO `level` (`id`, `nama_level`, `created_at`, `updated_at`) VALUES
+(1, 'SPV', '2022-08-08 06:48:53', '2022-08-08 06:48:53'),
+(2, 'Gudang', '2022-08-08 06:48:53', '2022-08-08 06:48:53'),
+(3, 'Produksi', '2022-08-08 06:48:53', '2022-08-08 06:48:53');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `migrations`
 --
 
@@ -173,7 +195,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (5, '2022_06_24_174516_barang', 2),
 (6, '2022_06_24_174619_brg_masuk', 2),
 (7, '2022_06_24_174636_brg_keluar', 2),
-(8, '2022_06_24_174706_kategori', 3);
+(8, '2022_06_24_174706_kategori', 3),
+(9, '2022_08_08_063130_level', 4);
 
 -- --------------------------------------------------------
 
@@ -214,11 +237,9 @@ CREATE TABLE `personal_access_tokens` (
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `level` int(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -227,8 +248,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `username`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin', 'admin@gmail.com', NULL, '$2y$10$fBtp0Onz8.QsU5TcuQ215OjSdy4w.PoYTkss5lqVv.n.uUHozq4mK', NULL, '2022-06-27 15:57:23', '2022-06-27 15:57:23');
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `level`, `created_at`, `updated_at`) VALUES
+(1, 'SPV', 'spv@vpm.com', '$2y$10$v1iUo9VooryYjrUMfiguyeiPToICzvfgwFEPNbLR61SYBdEUZEoS2', 1, '2022-06-27 15:57:23', '2022-08-08 08:08:00'),
+(2, 'Gudang', 'gudang@vpm.com', '$2y$10$z5kdaM1zL8bRwlgzEBhP3O6IDQWdz.DWRS7mAgAus2Soq0EJj/jNO', 2, '2022-08-08 08:14:13', '2022-08-08 08:14:13'),
+(3, 'Produksi', 'produksi@vpm.com', '$2y$10$Y2vCXp1IsPrs.dKQEJzOgeuDHMe7Zvku9CaMcNxfj9esQsYUU9bR2', 3, '2022-08-08 08:14:41', '2022-08-08 08:14:41');
 
 --
 -- Indexes for dumped tables
@@ -271,6 +294,12 @@ ALTER TABLE `kategori`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `level`
+--
+ALTER TABLE `level`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
@@ -295,7 +324,8 @@ ALTER TABLE `personal_access_tokens`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`email`);
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD KEY `id_level` (`level`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -332,10 +362,16 @@ ALTER TABLE `kategori`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `level`
+--
+ALTER TABLE `level`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -347,7 +383,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -372,6 +408,12 @@ ALTER TABLE `brg_keluar`
 ALTER TABLE `brg_masuk`
   ADD CONSTRAINT `brg_masuk_ibfk_1` FOREIGN KEY (`id_brg`) REFERENCES `barang` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `brg_masuk_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`level`) REFERENCES `level` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

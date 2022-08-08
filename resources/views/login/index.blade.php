@@ -85,7 +85,7 @@
                 <form action="/" method="POST">
                     @csrf
                     <img class="mb-1" src="/assets/img/Vpm Logo.png" alt="" width="182" height="167">
-                    <h1 class="h3 mb-4 fw-normal text-start">Please Login</h1>
+                    <h1 class="h3 mb-4 fw-normal text-start">Login</h1>
                     <div class="form-floating mb-3">
                         <input type="email" class="form-control rounded @error('email') is-invalid @enderror" name="email" id="email" placeholder="name@example.com" required value="{{ old('email') }}">
                         {{-- <label for="email">Email address</label> --}}
@@ -101,7 +101,6 @@
                     </div>
 
                     <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
-                    <small class="d-block text_center mt-3">Not Registered ? <a href="/register">Register Now !</a></small>
                     <p class="mt-2 mb-3 text-muted">Yana Supriyana &copy; 2022</p>
                 </form>
             </main>

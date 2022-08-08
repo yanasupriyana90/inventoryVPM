@@ -7,7 +7,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\UserController;
+// use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,8 +29,8 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth');
 
 
 // Register
-Route::get('/register', [RegisterController::class, 'index'])->middleware('guest');
-Route::post('/register', [RegisterController::class, 'store'])->middleware('guest');
+// Route::get('/register', [RegisterController::class, 'index'])->middleware('guest');
+// Route::post('/register', [RegisterController::class, 'store'])->middleware('guest');
 
 
 // Home
@@ -37,11 +38,12 @@ Route::get('/home', [HomeController::class, 'home'])->middleware('auth');
 
 
 Route::group(['middleware' => ['auth', 'level:1']], function () {
-    // Data Kategori
-    Route::get('/kategori', [KategoriController::class, 'index']);
-    Route::post('/kategori/store', [KategoriController::class, 'store']);
-    Route::post('/kategori/{id}/update', [KategoriController::class, 'update']);
-    Route::get('/kategori/{id}/destroy', [KategoriController::class, 'destroy']);
+    // Data User
+    Route::get('/user', [UserController::class, 'index']);
+    Route::post('/user/store', [UserController::class, 'store']);
+    Route::post('/user/{id}/update', [UserController::class, 'update']);
+    Route::get('/user/{id}/destroy', [UserController::class, 'destroy']);
+
 
     // Data Barang
     Route::get('/barang', [BarangController::class, 'index']);
@@ -49,6 +51,11 @@ Route::group(['middleware' => ['auth', 'level:1']], function () {
     Route::post('/barang/{id}/update', [BarangController::class, 'update']);
     Route::get('/barang/{id}/destroy', [BarangController::class, 'destroy']);
 
+    // Data Kategori
+    Route::get('/kategori', [KategoriController::class, 'index']);
+    Route::post('/kategori/store', [KategoriController::class, 'store']);
+    Route::post('/kategori/{id}/update', [KategoriController::class, 'update']);
+    Route::get('/kategori/{id}/destroy', [KategoriController::class, 'destroy']);
 
     // Laporan Kategori
     Route::get('/lap_kategori', [LaporanController::class, 'lap_kategori']);
