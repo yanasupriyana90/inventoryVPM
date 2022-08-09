@@ -46,7 +46,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>tanggal Keluar</label>
+                                    <label>Tanggal Keluar</label>
                                     <input type="date" class="form-control" name="tgl_brg_keluar" required>
                                 </div>
 

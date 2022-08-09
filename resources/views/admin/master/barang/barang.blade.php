@@ -47,6 +47,7 @@
                                             <th>Nama Barang</th>
                                             <th>Kategori</th>
                                             <th>Harga</th>
+                                            <th>Min Stok</th>
                                             <th>Stok</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -62,6 +63,7 @@
                                             <td>{{ $row->nama_brg }}</td>
                                             <td>{{ $row->nama_kategori }}</td>
                                             <td>Rp. {{ number_format($row->harga) }}</td>
+                                            <td>{{ $row->minStok }} Unit</td>
                                             <td>{{ $row->stok }} Unit</td>
                                             <td class="text-center">
                                                 <button class="btn btn-info btn-xs" data-item="{{$row}}" data-qrCode="{{ htmlspecialchars($row->qrCode) }}" onclick="generateQrCode(this)"><i class="fa fa-qrcode"></i> Cetak QrCode</button>
