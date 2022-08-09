@@ -19,7 +19,8 @@ class HomeController extends Controller
         $brg_masuk_today = BrgMasuk::where('tgl_brg_masuk', '=', $date)->count();
         $brg_keluar_today = BrgKeluar::where('tgl_brg_keluar', '=', $date)->count();
 
+        $stokBarang = Barang::whereRaw('stok <= minStok')->get();
 
-        return view('home', compact('kategori', 'barang', 'brg_masuk_today', 'brg_keluar_today'));
+        return view('home', compact('kategori', 'barang', 'brg_masuk_today', 'brg_keluar_today', 'stokBarang'));
     }
 }

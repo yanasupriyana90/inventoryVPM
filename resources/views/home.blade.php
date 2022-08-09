@@ -84,6 +84,34 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-6 col-md-6">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-warning bubble-shadow-small">
+                                        <i class="flaticon-box"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-stats ml-3 ml-sm-0">
+                                    <div class="numbers">
+                                        <h2>Stok minimal barang</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <ul class="list-group list-group-flush w-100">
+                                    @foreach($stokBarang as $key)
+                                    <li class="list-group-item justify-content-between py-1">
+                                        <label class="font-weight-bold">{{$key->nama_brg}}</label>
+                                        <span class="badge @if($key->stok == 0) badge-danger @else badge-warning @endif badge-pill">{{$key->stok}}</span>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

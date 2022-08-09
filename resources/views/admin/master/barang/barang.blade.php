@@ -122,12 +122,23 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="input-group mb-3">
-                            <input type="number" class="form-control" name="stok" placeholder="Stok .." required>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <div class="input-group mb-3">
+                                <input type="number" class="form-control" name="minStok" placeholder="Minimal Stok .." required>
 
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="basic-addon2">Unit</span>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">Unit</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group mb-3">
+                                <input type="number" class="form-control" name="stok" placeholder="Stok .." required>
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">Unit</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -185,13 +196,25 @@
                             <input type="number" value="{{ $d->harga }}" class="form-control" name="harga" placeholder="Harga .." required>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="">Minimal Stok</label>
+                            <div class="input-group mb-3">
+                                <input type="number" value="{{ $d->minStok }}" class="form-control" name="minStok" placeholder="Minimal Stok .." required>
 
-                    <div class="form-group">
-                        <div class="input-group mb-3">
-                            <input type="number" value="{{ $d->stok }}" class="form-control" name="stok" placeholder="Stok .." required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">Unit</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="">Stok</label>
+                            <div class="input-group mb-3">
+                                <input type="number" value="{{ $d->stok }}" class="form-control" name="stok" placeholder="Stok .." required>
 
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="basic-addon2">Unit</span>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">Unit</span>
+                                </div>
                             </div>
                         </div>
                     </div>

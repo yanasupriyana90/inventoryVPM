@@ -54,6 +54,7 @@ class BarangController extends Controller
             'id_kategori' => $request->id_kategori,
             'nama_brg' => $request->nama_brg,
             'harga' => $request->harga,
+            'minStok' => $request->minStok,
             'stok' => $request->stok,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
@@ -98,6 +99,7 @@ class BarangController extends Controller
         $barang->id_kategori = $request->id_kategori;
         $barang->nama_brg = $request->nama_brg;
         $barang->harga = $request->harga;
+        $barang->minStok = $request->minStok;
         $barang->stok = $request->stok;
         $barang->updated_at = date('Y-m-d H:i:s');
 
